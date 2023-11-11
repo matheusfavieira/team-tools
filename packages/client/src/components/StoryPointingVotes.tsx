@@ -1,27 +1,30 @@
-import React from 'react';
+export const StoryPointingVotes = ({ users, meeting }) => {
+  const getSectionTitle = () => (<h3>Users Votes:</h3>);
 
-export const StoryPointingVotes = ({ users, meetingUsers, votes, showVotes }) => {
-  return (
-    <>
-      <h3>Users Votes:</h3>
-      {meetingUsers.length ? (
-        <>
-          {meetingUsers.map(userId => {
-            const meetingUser = users[userId];
-            const userVote = votes[userId];
-
-            return (
-              <p key={userId}>
-                {meetingUser.name}: {!!userVote ? (showVotes ? userVote : '###') : ''}
-              </p>
-            )
-          })}
-        </>
-      ) : (
+  if (!meeting.users.length) {
+    return (
+      <>
+        {getSectionTitle()}
         <p>
           <i>No users yet</i>
         </p>
-      )}
+      </>
+    )
+  }
+
+  return (
+    <>
+      {getSectionTitle()}
+      {meeting.users.map((userId: string) => {
+        const meetingUser = users[userId];
+        const userVote = meeting.votes[userId];
+
+        return (
+          <p key={userId}>
+            {meetingUser.name}: {!!userVote ? (meeting.showVotes ? userVote : '###') : ''}
+          </p>
+        )
+      })}
     </>
   );
 }

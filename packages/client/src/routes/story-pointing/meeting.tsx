@@ -1,16 +1,23 @@
-import { useLoaderData, useParams } from "react-router-dom";
+import { redirect, useLoaderData, useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import { getMeeting } from "../../models/meeting";
 import { getLoggedUser, getUsers } from "../../models/user";
 import useWebSocket from 'react-use-websocket';
-import { StoryPointingAdminControllers } from '../../components/StoryPointingAdminControllers';
 import { StoryPointingPoints } from '../../components/StoryPointingPoints';
 import { StoryPointingVotes } from '../../components/StoryPointingVotes';
 
 export async function loader({ params }) {
-  const user = await getLoggedUser();
-  const users = await getUsers();
-  const meeting = await getMeeting(params.meetingId);
+  const [user, users, meeting] = await Promise.allSettled([
+    getLoggedUser(),
+    getUsers(),
+    getMeeting(params.meetingId),
+  ]).then(([user, users, meeting]) => {
+    return [user.value, users.value, meeting.value];
+  });
+
+  if (!user || !meeting) {
+    return redirect("/story-pointing");
+  }
 
   return { user, users, meeting };
 }
@@ -21,12 +28,9 @@ export default function Meeting() {
 
   const [users, setUsers] = useState(defaultUsers);
   const [meeting, setMeeting] = useState(defaultMeeting);
+  const [isOwner, setIsOwner] = useState(user.id === meeting?.createdBy);
 
-  const [availablePoints, setAvailablePoints] = useState(meeting.availablePoints);
-  const [isOwner, setIsOwner] = useState(user.id === meeting.createdBy);
-  const [showVotes, setShowVotes] = useState(meeting.showVotes);
-
-  const { sendJsonMessage } = useWebSocket(`ws://localhost:3000/meeting-votes`, {
+  const { sendJsonMessage } = useWebSocket(`${import.meta.env.VITE_APP_SOCKET_HOST}/meeting-votes`, {
     queryParams: {
       userId: user.id,
       meetingId: meeting.id,
@@ -40,32 +44,28 @@ export default function Meeting() {
 
       if (data.meeting) {
         setMeeting(data.meeting);
-        setAvailablePoints(data.meeting.availablePoints);
-        setShowVotes(data.meeting.showVotes);
       }
     },
   });
 
   const onVote = (vote) => {
-    setMeeting({...meeting, votes: {...meeting.votes, [user.id]: vote }});
     sendJsonMessage({ action: 'add-vote', vote });
   };
 
   const onToggleResults = () => {
-    const willShowResults = !showVotes;
-    setShowVotes(willShowResults);
+    const willShowResults = !meeting.showVotes;
     sendJsonMessage({ action: willShowResults ? 'show-votes' : 'hide-votes' });
   };
 
   const onReset = () => {
-    setShowVotes(false);
-    setMeeting({...meeting, votes: {}, showVotes: false });
     sendJsonMessage({ action: 'reset-votes' });
   };
 
   useEffect(() => {
     setIsOwner(meeting?.createdBy === user.id);
   }, [meeting.createdBy, user.id])
+  
+  const availablePoints = import.meta.env.VITE_APP_STORY_POINTING_OPTIONS?.split(',') ?? ['0', '0.5', '1', '2', '3', '5', '8', '?'];
 
   return (
     <>
@@ -73,11 +73,21 @@ export default function Meeting() {
 
       <h2>User: {user.name}</h2>
 
-      {availablePoints.length && (<StoryPointingPoints points={availablePoints} onVote={onVote} userVote={meeting?.votes?.[user.id]} />)}
+      <StoryPointingPoints points={availablePoints} onVote={onVote} userVote={meeting.votes?.[user.id]} />
 
-      <StoryPointingVotes meetingUsers={meeting.users} users={users} votes={meeting.votes} showVotes={showVotes} />
+      <StoryPointingVotes meeting={meeting} users={users} />
 
-      {isOwner && (<StoryPointingAdminControllers showVotes={showVotes} onToggleResults={onToggleResults} onReset={onReset} />)}
+      {isOwner && (
+        <>
+          <button type="button" onClick={onToggleResults}>
+            {meeting?.showVotes ? 'Hide Votes' : 'Show Votes'}
+          </button>
+    
+          <button type="button" onClick={onReset}>
+            Reset
+          </button>
+        </>  
+      )}
     </>
   );
 }

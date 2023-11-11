@@ -1,12 +1,17 @@
+import { useEffect } from "react";
 import { Outlet, NavLink, useNavigation } from "react-router-dom";
 
 export default function Template() {
   const navigation = useNavigation();
 
+  useEffect(() => {
+    document.title = import.meta.env.VITE_APP_TITLE;
+  }, []);
+
   return (
     <>
       <div id="sidebar">
-        <h1><NavLink to="/">Team Tools</NavLink></h1>
+        <h1><NavLink to="/">{import.meta.env.VITE_APP_TITLE}</NavLink></h1>
 
         <nav>
             <ul>

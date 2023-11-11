@@ -1,7 +1,9 @@
-const apiHost = 'http://localhost:3000';
+const apiHost = import.meta.env.VITE_APP_API_HOST;
 
 export async function getMeetings() {
-  const meetings = await fetch(`${apiHost}/meetings`).then(result => result.json() || []);
+  const meetings = await fetch(`${apiHost}/meetings`).then(
+    (result) => result.json() || []
+  );
   return meetings;
 }
 
@@ -36,7 +38,11 @@ export async function updateMeeting(id, updates) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ...meeting, ...updates, id: meeting.id, createdAt: meeting.createdAt }),
+    body: JSON.stringify({
+      ...meeting,
+      ...updates,
+      id: meeting.id,
+    }),
   });
 
   return response.json();

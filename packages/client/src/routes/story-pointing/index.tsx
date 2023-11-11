@@ -25,7 +25,7 @@ export async function action({ request }) {
 }
 
 export async function loader() {
-  const user = await getLoggedUser();
+  const user = await getLoggedUser(false);
   return { user };
 }
 

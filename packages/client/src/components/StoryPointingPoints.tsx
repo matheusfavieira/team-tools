@@ -1,4 +1,8 @@
 export const StoryPointingPoints = ({ points, onVote, userVote }) => {
+  if (!points.length) {
+    return (<></>);
+  }
+
   return (
     <>
       {points.map(point => (

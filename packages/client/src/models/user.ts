@@ -1,9 +1,11 @@
 import localforage from "localforage";
 
-const apiHost = 'http://localhost:3000';
+const apiHost = import.meta.env.VITE_APP_API_HOST;
 
 export async function getUsers() {
-  const users = await fetch(`${apiHost}/users`).then(result => result.json() || []);
+  const users = await fetch(`${apiHost}/users`).then(
+    (result) => result.json() || []
+  );
   return users;
 }
 
@@ -26,8 +28,17 @@ export async function createUser(name) {
   return user;
 }
 
-export async function getLoggedUser() {
-  const loggedUserId = await localforage.getItem('current-user');
+export async function getLoggedUser(allowCreation = true) {
+  let loggedUserId = await localforage.getItem("current-user");
+
+  if (!loggedUserId && allowCreation) {
+    const name = prompt("Tell us your name:");
+    if (!name) {
+      return;
+    }
+    return await createAndSetLoggedUser(name);
+  }
+
   return getUser(loggedUserId);
 }
 
@@ -49,7 +60,11 @@ export async function updateUser(id, updates) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ ...user, ...updates, id: user.id, createdAt: user.createdAt }),
+    body: JSON.stringify({
+      ...user,
+      ...updates,
+      id: user.id,
+    }),
   });
 
   return response.json();
