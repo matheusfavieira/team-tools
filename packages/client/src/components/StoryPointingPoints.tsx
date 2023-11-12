@@ -1,21 +1,29 @@
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+
 export const StoryPointingPoints = ({ points, onVote, userVote }) => {
   if (!points.length) {
-    return (<></>);
+    return <></>;
   }
 
   return (
     <>
-      {points.map(point => (
-          <button
+      <ButtonGroup aria-label="medium button group">
+        {points.map((point) => (
+          <Button
             key={point}
             name="point"
             value={point}
-            className={userVote === point ? 'active' : ''}
+            variant={userVote === point ? "contained" : "outlined"}
             onClick={() => onVote(point)}
           >
-            {point} {point !== '?' ? (`point${['1', '0.5'].includes(point) ? '' : 's'}`) : ''}
-          </button>
-      ))}
+            {point}{" "}
+            {point !== "?"
+              ? `point${["1", "0.5"].includes(point) ? "" : "s"}`
+              : ""}
+          </Button>
+        ))}
+      </ButtonGroup>
     </>
   );
-}
+};
