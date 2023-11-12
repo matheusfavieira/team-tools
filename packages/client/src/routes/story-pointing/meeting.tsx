@@ -87,7 +87,7 @@ export default function Meeting() {
     ];
 
   return (
-    <>
+    <Box>
       <h1>Meeting ID: {params.meetingId}</h1>
 
       <h2>User: {user.name}</h2>
@@ -98,36 +98,38 @@ export default function Meeting() {
         userVote={meeting.votes?.[user.id]}
       />
 
-      <StoryPointingVotes meeting={meeting} users={users} />
+      <Box component="main" sx={{ width: "400px" }}>
+        <StoryPointingVotes meeting={meeting} users={users} />
 
-      {isOwner && (
-        <Box
-          sx={{
-            mt: 2,
-            display: "flex",
-            flexDirection: "row-reverse",
-            justifyContent: "space-between",
-          }}
-        >
-          <Button
-            variant="outlined"
-            color="success"
-            type="button"
-            onClick={onToggleResults}
+        {isOwner && (
+          <Box
+            sx={{
+              mt: 2,
+              display: "flex",
+              flexDirection: "row-reverse",
+              justifyContent: "space-between",
+            }}
           >
-            {meeting.showVotes ? "Hide Votes" : "Show Votes"}
-          </Button>
+            <Button
+              variant="outlined"
+              color="success"
+              type="button"
+              onClick={onToggleResults}
+            >
+              {meeting.showVotes ? "Hide Votes" : "Show Votes"}
+            </Button>
 
-          <Button
-            variant="outlined"
-            color="warning"
-            type="button"
-            onClick={onReset}
-          >
-            Reset
-          </Button>
-        </Box>
-      )}
-    </>
+            <Button
+              variant="outlined"
+              color="warning"
+              type="button"
+              onClick={onReset}
+            >
+              Reset
+            </Button>
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 }

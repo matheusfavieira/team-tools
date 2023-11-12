@@ -52,8 +52,10 @@ export const StoryPointingVotes = ({ users, meeting }) => {
                 <TableCell align="right">
                   {meeting.showVotes ? (
                     row.vote
-                  ) : (
+                  ) : row.vote ? (
                     <HourglassTopIcon fontSize="12px" />
+                  ) : (
+                    <></>
                   )}
                 </TableCell>
               </TableRow>

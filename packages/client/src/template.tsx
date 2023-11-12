@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { Outlet, NavLink, useNavigation } from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
 
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
@@ -111,7 +110,7 @@ export default function DrawerAppBar(props: Props) {
           {drawer}
         </Drawer>
       </nav>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main" sx={{ p: 3, width: "100%" }}>
         <Toolbar />
         <Outlet />
       </Box>
