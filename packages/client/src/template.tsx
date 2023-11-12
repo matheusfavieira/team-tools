@@ -20,6 +20,7 @@ const drawerWidth = 240;
 const navItems = [
   { label: "Home", url: "/" },
   { label: "Story Pointing", url: "story-pointing" },
+  { label: "Mood Meter", url: "mood-meter" },
 ];
 
 export default function DrawerAppBar(props: Props) {

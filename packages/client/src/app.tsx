@@ -19,11 +19,13 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import MoodMeter from "./routes/mood-meter";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Template />,
+    errorElement: <ErrorPage />,
     children: [
       {
         errorElement: <ErrorPage />,
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
             path: "story-pointing/:meetingId",
             loader: storyPointingMeetingLoader,
             element: <StoryPointingMeeting />,
+          },
+          {
+            path: "mood-meter/",
+            element: <MoodMeter />,
           },
         ],
       },
