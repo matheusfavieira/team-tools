@@ -7,7 +7,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 
-export const StoryPointingVotes = ({ users, meeting }) => {
+export const StoryPointingVotes = ({
+  users,
+  meeting,
+}: StoryPointingVotesParams) => {
   const getSectionTitle = () => <h2>Votes:</h2>;
 
   if (!meeting.users.length) {
@@ -53,7 +56,7 @@ export const StoryPointingVotes = ({ users, meeting }) => {
                   {meeting.showVotes ? (
                     row.vote
                   ) : row.vote ? (
-                    <HourglassTopIcon fontSize="12px" />
+                    <HourglassTopIcon sx={{ fontSize: "12px" }} />
                   ) : (
                     <></>
                   )}

@@ -113,6 +113,8 @@ const moods = {
   ],
 };
 
+type MoodsColor = keyof typeof moods;
+
 const emojis = [
   "🐶",
   "🐱",
@@ -140,9 +142,14 @@ const selectRandomEmoji = () =>
   emojis[Math.floor(Math.random() * emojis.length)];
 
 export default function MoodMeter() {
-  const [selectedMoods, setSelectedMoods] = useState({});
+  const [selectedMoods, setSelectedMoods] = useState<
+    Record<string, { count: number; emoji: string }>
+  >({});
 
-  const onMoodClick = (e, mood) => {
+  const onMoodClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    mood: string
+  ) => {
     const isRemoving = e.shiftKey;
 
     let selectedMood = selectedMoods[mood];
@@ -164,7 +171,7 @@ export default function MoodMeter() {
   return (
     <Box className="mood-chart">
       {Object.keys(moods).map((color) => {
-        const moodsByColor = moods[color];
+        const moodsByColor: string[] = moods[color as MoodsColor];
 
         return (
           <Box key={color} className={`mood-quadrant`}>

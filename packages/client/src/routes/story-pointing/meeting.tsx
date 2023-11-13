@@ -1,4 +1,9 @@
-import { redirect, useLoaderData, useParams } from "react-router-dom";
+import {
+  LoaderFunctionArgs,
+  redirect,
+  useLoaderData,
+  useParams,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getMeeting } from "../../models/meeting";
 import { getLoggedUser, getUsers } from "../../models/user";
@@ -8,20 +13,28 @@ import { StoryPointingVotes } from "../../components/StoryPointingVotes";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-export async function loader({ params }) {
-  const [user, users, meeting] = await Promise.allSettled([
+type LoaderResults = {
+  user: User;
+  users: Record<string, User>;
+  meeting: Meeting;
+};
+
+export async function loader({ params }: LoaderFunctionArgs<MeetingParams>) {
+  if (!params.meetingId) {
+    return redirect("/story-pointing");
+  }
+
+  const [user, users, meeting] = await Promise.all([
     getLoggedUser(),
     getUsers(),
-    getMeeting(params.meetingId),
-  ]).then(([user, users, meeting]) => {
-    return [user.value, users.value, meeting.value];
-  });
+    getMeeting(params.meetingId!),
+  ]);
 
   if (!user || !meeting) {
     return redirect("/story-pointing");
   }
 
-  return { user, users, meeting };
+  return { user, users, meeting } as LoaderResults;
 }
 
 export default function Meeting() {
@@ -30,7 +43,7 @@ export default function Meeting() {
     user,
     users: defaultUsers,
     meeting: defaultMeeting,
-  } = useLoaderData();
+  } = useLoaderData() as LoaderResults;
 
   const [users, setUsers] = useState(defaultUsers);
   const [meeting, setMeeting] = useState(defaultMeeting);
@@ -57,7 +70,7 @@ export default function Meeting() {
     }
   );
 
-  const onVote = (vote) => {
+  const onVote = (vote: string) => {
     sendJsonMessage({ action: "add-vote", vote });
   };
 
