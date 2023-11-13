@@ -1,4 +1,9 @@
-import { Form, redirect, useLoaderData } from "react-router-dom";
+import {
+  ActionFunctionArgs,
+  Form,
+  redirect,
+  useLoaderData,
+} from "react-router-dom";
 import { createMeeting } from "../../models/meeting";
 import {
   createAndSetLoggedUser,
@@ -8,11 +13,11 @@ import {
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-export async function action({ request }) {
+export async function action({ request }: ActionFunctionArgs) {
   let formData = await request.formData();
-  let meetingId = formData.get("meetingId");
-  let name = formData.get("name");
-  let userId = formData.get("userId");
+  let meetingId = formData.get("meetingId") as string;
+  let name = formData.get("name") as string;
+  let userId = formData.get("userId") as string;
 
   if (name) {
     if (userId) {
@@ -36,7 +41,7 @@ export async function loader() {
 }
 
 export default function Index() {
-  const { user } = useLoaderData();
+  const { user } = useLoaderData() as { user: User };
 
   return (
     <>

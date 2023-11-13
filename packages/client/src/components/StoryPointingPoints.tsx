@@ -1,7 +1,11 @@
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 
-export const StoryPointingPoints = ({ points, onVote, userVote }) => {
+export const StoryPointingPoints = ({
+  points,
+  onVote,
+  userVote,
+}: StoryPointingPointsParams) => {
   if (!points.length) {
     return <></>;
   }
