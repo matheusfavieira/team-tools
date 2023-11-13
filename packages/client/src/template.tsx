@@ -20,10 +20,10 @@ const drawerWidth = 240;
 const navItems = [
   { label: "Home", url: "/" },
   { label: "Story Pointing", url: "story-pointing" },
+  { label: "Mood Meter", url: "mood-meter" },
 ];
 
-export default function DrawerAppBar(props: Props) {
-  const { window } = props;
+export default function DrawerAppBar() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -53,7 +53,7 @@ export default function DrawerAppBar(props: Props) {
   );
 
   const container =
-    window !== undefined ? () => window().document.body : undefined;
+    window !== undefined ? () => window.document.body : undefined;
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -81,7 +81,7 @@ export default function DrawerAppBar(props: Props) {
               <Button
                 key={item.url}
                 sx={{ color: "#fff" }}
-                LinkComponent={NavLink}
+                component={NavLink}
                 to={item.url}
               >
                 {item.label}
