@@ -6,7 +6,6 @@ export async function getUsers(): Promise<Record<string, User>> {
   const users = await fetch(`${apiHost}/users`, {
     headers: new Headers({
       "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "69420",
     }),
   }).then((result) => result.json() || []);
   return users;
@@ -23,7 +22,6 @@ export async function createUser(name: string) {
     method: "POST",
     headers: new Headers({
       "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "69420",
     }),
     body: JSON.stringify({ name }),
   });
@@ -65,7 +63,6 @@ export async function updateUser(id: string, updates: Partial<User>) {
     method: "PATCH",
     headers: new Headers({
       "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "69420",
     }),
     body: JSON.stringify({
       ...user,

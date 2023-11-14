@@ -3,7 +3,7 @@ const apiHost = import.meta.env.VITE_APP_API_HOST;
 export async function getMeetings(): Promise<Record<string, Meeting>> {
   const meetings = await fetch(`${apiHost}/meetings`, {
     headers: new Headers({
-      "ngrok-skip-browser-warning": "69420",
+      "Content-Type": "application/json",
     }),
   }).then((result) => result.json() || []);
   return meetings;
@@ -14,7 +14,6 @@ export async function createMeeting(createdBy: string) {
     method: "POST",
     headers: new Headers({
       "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "69420",
     }),
     body: JSON.stringify({ createdBy }),
   });
@@ -40,7 +39,6 @@ export async function updateMeeting(id: string, updates: Partial<Meeting>) {
     method: "PATCH",
     headers: new Headers({
       "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "69420",
     }),
     body: JSON.stringify({
       ...meeting,
