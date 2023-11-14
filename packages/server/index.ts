@@ -1,6 +1,6 @@
 const CORS_HEADERS = {
   headers: {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin": Bun.env.CORS_ALLOW_ORIGIN,
     "Access-Control-Allow-Methods": "OPTIONS, POST, PATCH",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
   },
