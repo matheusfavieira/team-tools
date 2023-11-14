@@ -21,6 +21,20 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import MoodMeter from "./routes/mood-meter";
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { purple } from '@mui/material/colors';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: purple[900],
+    },
+    secondary: {
+      main: purple[400],
+    },
+  },
+});
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -54,6 +68,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );

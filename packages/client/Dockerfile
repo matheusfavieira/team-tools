@@ -10,6 +10,6 @@ COPY . .
 
 RUN bun run build
 
-EXPOSE 8080
+EXPOSE 4173
 
 CMD ["bun", "run", "preview"]
