@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  team-tools-server:
+    build: ./packages/server
+    ports:
+      - "3000:3000"
+
+  team-tools-client:
+    build: ./packages/client
+    ports:
+      - "4173:4173"
