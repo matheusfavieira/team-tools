@@ -36,7 +36,7 @@ export const StoryPointingVotes = ({
       {getSectionTitle()}
 
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 150 }}>
+        <Table>
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>

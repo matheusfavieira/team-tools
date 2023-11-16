@@ -111,7 +111,7 @@ export default function Meeting() {
         userVote={meeting.votes?.[user.id]}
       />
 
-      <Box component="main" sx={{ width: "400px" }}>
+      <Box component="main" sx={{ width: "fit-content" }}>
         <StoryPointingVotes meeting={meeting} users={users} />
 
         {isOwner && (
@@ -121,6 +121,7 @@ export default function Meeting() {
               display: "flex",
               flexDirection: "row-reverse",
               justifyContent: "space-between",
+              gap: 1,
             }}
           >
             <Button

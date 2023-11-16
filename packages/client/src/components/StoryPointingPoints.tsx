@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
+import Box from "@mui/material/Box";
 
 export const StoryPointingPoints = ({
   points,
@@ -12,7 +12,13 @@ export const StoryPointingPoints = ({
 
   return (
     <>
-      <ButtonGroup aria-label="medium button group">
+      <Box
+        sx={{
+          display: "flex",
+          gap: 1,
+          flexWrap: "wrap",
+        }}
+      >
         {points.map((point) => (
           <Button
             key={point}
@@ -20,6 +26,7 @@ export const StoryPointingPoints = ({
             value={point}
             variant={userVote === point ? "contained" : "outlined"}
             onClick={() => onVote(point)}
+            sx={{ width: "150px" }}
           >
             {point}{" "}
             {point !== "?"
@@ -27,7 +34,7 @@ export const StoryPointingPoints = ({
               : ""}
           </Button>
         ))}
-      </ButtonGroup>
+      </Box>
     </>
   );
 };
