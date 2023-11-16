@@ -12,6 +12,8 @@ import { StoryPointingPoints } from "../../components/StoryPointingPoints";
 import { StoryPointingVotes } from "../../components/StoryPointingVotes";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import StoryPointingSettings from "../../components/StoryPointingSettings";
+import StoryPointingAdminRightsRequest from "../../components/StoryPointingAdminRightsRequest";
 
 type LoaderResults = {
   user: User;
@@ -45,9 +47,11 @@ export default function Meeting() {
     meeting: defaultMeeting,
   } = useLoaderData() as LoaderResults;
 
+  const [userRequestingAdminRights, setUserRequestingAdminRights] = useState();
+
   const [users, setUsers] = useState(defaultUsers);
   const [meeting, setMeeting] = useState(defaultMeeting);
-  const [isOwner, setIsOwner] = useState(user.id === meeting?.userIdAdmin);
+  const [isAdmin, setIsAdmin] = useState(user.id === meeting?.userIdAdmin);
 
   const { sendJsonMessage } = useWebSocket(
     `${import.meta.env.VITE_APP_WEBSOCKET_HOST}/meeting-votes`,
@@ -58,6 +62,10 @@ export default function Meeting() {
       },
       onMessage: (event) => {
         const data = JSON.parse(event.data);
+
+        if (data.action === "request-admin-rights" && isAdmin) {
+          setUserRequestingAdminRights(data.user);
+        }
 
         if (data.users) {
           setUsers(data.users);
@@ -83,8 +91,28 @@ export default function Meeting() {
     sendJsonMessage({ action: "reset-votes" });
   };
 
+  const onRequestAdminRights = () => {
+    sendJsonMessage({ action: "request-admin-rights" });
+  };
+
+  const onDenyAdminRights = () => {
+    sendJsonMessage({
+      action: "deny-admin-rights",
+      user: userRequestingAdminRights,
+    });
+    setUserRequestingAdminRights(undefined);
+  };
+
+  const onAllowAdminRights = () => {
+    sendJsonMessage({
+      action: "allow-admin-rights",
+      user: userRequestingAdminRights,
+    });
+    setUserRequestingAdminRights(undefined);
+  };
+
   useEffect(() => {
-    setIsOwner(meeting?.userIdAdmin === user.id);
+    setIsAdmin(meeting?.userIdAdmin === user.id);
   }, [meeting.userIdAdmin, user.id]);
 
   const availablePoints =
@@ -115,7 +143,7 @@ export default function Meeting() {
       <Box component="main" sx={{ width: "fit-content" }}>
         <StoryPointingVotes meeting={meeting} users={users} />
 
-        {isOwner && (
+        {isAdmin && (
           <Box
             sx={{
               mt: 2,
@@ -145,6 +173,18 @@ export default function Meeting() {
           </Box>
         )}
       </Box>
+
+      <StoryPointingAdminRightsRequest
+        userRequestingAdminRights={userRequestingAdminRights}
+        isAdmin={isAdmin}
+        onAllowAdminRights={onAllowAdminRights}
+        onDenyAdminRights={onDenyAdminRights}
+      />
+
+      <StoryPointingSettings
+        onRequestAdminRights={onRequestAdminRights}
+        isAdmin={isAdmin}
+      />
     </Box>
   );
 }

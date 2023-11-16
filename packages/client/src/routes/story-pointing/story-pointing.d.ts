@@ -26,3 +26,15 @@ declare interface StoryPointingVotesParams {
   users: Record<string, User>;
   meeting: Meeting;
 }
+
+declare interface StoryPointingAdminRightsRequestParams {
+  userRequestingAdminRights?: User;
+  isAdmin: boolean;
+  onAllowAdminRights: CallableFunction;
+  onDenyAdminRights: CallableFunction;
+}
+
+declare interface StoryPointingSettingsParams {
+  onRequestAdminRights: CallableFunction;
+  isAdmin: boolean;
+}

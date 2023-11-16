@@ -9,11 +9,17 @@ const CORS_HEADERS = {
   },
 };
 
-const generateSocketPayload = ({ action, meeting }) => ({
+const generateSocketPayload = ({ action, meeting, user }) => ({
   action,
   users: userStore,
   meeting,
+  user,
 });
+
+const publishMessage = (server, meetingId, payload) => {
+  const meetingRoom = `meeting-${meetingId}`;
+  server.publish(meetingRoom, JSON.stringify(payload));
+};
 
 const server = Bun.serve<{ user: Entities.User; meeting: Entities.Meeting }>({
   async fetch(req, server) {
@@ -108,6 +114,28 @@ const server = Bun.serve<{ user: Entities.User; meeting: Entities.Meeting }>({
 
       const meeting = new Meeting({ id: meetingId });
 
+      if (options.action === "request-admin-rights") {
+        const payload = generateSocketPayload({
+          action: options.action,
+          meeting: meeting.meeting,
+          user: userStore[userId],
+        });
+
+        publishMessage(server, meetingId, payload);
+        return;
+      }
+
+      if (options.action === "deny-admin-rights") {
+        const payload = generateSocketPayload({
+          action: options.action,
+          meeting: meeting.meeting,
+          user: options.user,
+        });
+
+        publishMessage(server, meetingId, payload);
+        return;
+      }
+
       switch (options.action) {
         case "add-vote":
           meeting.addVote(userId, options.vote);
@@ -129,19 +157,21 @@ const server = Bun.serve<{ user: Entities.User; meeting: Entities.Meeting }>({
           meeting.resetVotes();
           break;
 
+        case "allow-admin-rights":
+          meeting.changeAdmin(options.user.id);
+          break;
+
         case "loaded":
         default:
           break;
       }
-
-      const meetingRoom = `meeting-${meetingId}`;
 
       const payload = generateSocketPayload({
         action: options.action,
         meeting: meeting.meeting,
       });
 
-      server.publish(meetingRoom, JSON.stringify(payload));
+      publishMessage(server, meetingId, payload);
     },
   },
 });

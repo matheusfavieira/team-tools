@@ -148,4 +148,16 @@ export default class Meeting {
 
     return this.meeting;
   }
+
+  changeAdmin(userId: Entities.User["id"]) {
+    if (!this.meeting) {
+      return;
+    }
+
+    this.meeting.userIdAdmin = userId;
+
+    dataStore[this.id] = this.meeting;
+
+    return this.meeting;
+  }
 }
