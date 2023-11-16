@@ -30,6 +30,10 @@ export default function DrawerAppBar() {
     setMobileOpen((prevState) => !prevState);
   };
 
+  React.useEffect(() => {
+    document.title = import.meta.env.VITE_APP_TITLE;
+  }, []);
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
