@@ -19,6 +19,7 @@ declare interface StoryPointingPointsParams {
   points: string[];
   onVote: CallableFunction;
   userVote: string;
+  showVotes: boolean;
 }
 
 declare interface StoryPointingVotesParams {

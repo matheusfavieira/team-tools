@@ -5,6 +5,7 @@ export const StoryPointingPoints = ({
   points,
   onVote,
   userVote,
+  showVotes,
 }: StoryPointingPointsParams) => {
   if (!points.length) {
     return <></>;
@@ -27,6 +28,7 @@ export const StoryPointingPoints = ({
             variant={userVote === point ? "contained" : "outlined"}
             onClick={() => onVote(point)}
             sx={{ width: "150px" }}
+            disabled={showVotes}
           >
             {point}{" "}
             {point !== "?"

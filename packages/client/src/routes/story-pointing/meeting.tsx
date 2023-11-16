@@ -107,6 +107,7 @@ export default function Meeting() {
 
       <StoryPointingPoints
         points={availablePoints}
+        showVotes={meeting.showVotes}
         onVote={onVote}
         userVote={meeting.votes?.[user.id]}
       />
