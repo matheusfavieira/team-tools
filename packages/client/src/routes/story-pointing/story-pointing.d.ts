@@ -12,7 +12,7 @@ declare interface Meeting {
   votes: Record<User.id, string>;
   users: User.id[];
   showVotes: boolean;
-  createdBy: User.id;
+  userIdAdmin: User.id;
 }
 
 declare interface StoryPointingPointsParams {

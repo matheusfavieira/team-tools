@@ -13,17 +13,22 @@ export async function getUsers(): Promise<Record<string, User>> {
 
 export async function createAndSetLoggedUser(name: string) {
   const user = await createUser(name);
-  localforage.setItem("current-user", user.id);
+  localforage.setItem("local-user", user);
+
   return user;
 }
 
 export async function createUser(name: string) {
+  const localUser = await localforage.getItem("local-user");
+
+  const payload = { ...(localUser ?? {}), name };
+
   const response = await fetch(`${apiHost}/users`, {
     method: "POST",
     headers: new Headers({
       "Content-Type": "application/json",
     }),
-    body: JSON.stringify({ name }),
+    body: JSON.stringify(payload),
   });
 
   const user = await response.json();
@@ -33,17 +38,30 @@ export async function createUser(name: string) {
 export async function getLoggedUser(
   allowCreation = true
 ): Promise<User | undefined> {
-  let loggedUserId = await localforage.getItem<string>("current-user");
+  let loggedUser = await localforage.getItem<User>("local-user");
+  let name = loggedUser?.name ?? null;
 
-  if (!loggedUserId && allowCreation) {
-    const name = prompt("Tell us your name:");
+  if (!loggedUser) {
+    if (!allowCreation) {
+      return;
+    }
+
+    name = prompt("Tell us your name:");
+
     if (!name) {
       return;
     }
-    return await createAndSetLoggedUser(name);
+
+    return createAndSetLoggedUser(name);
   }
 
-  return getUser(loggedUserId!);
+  const user = await getUser(loggedUser.id);
+
+  if (!user) {
+    return createAndSetLoggedUser(loggedUser.name);
+  }
+
+  return user;
 }
 
 export async function getUser(id: string) {

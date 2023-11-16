@@ -47,7 +47,7 @@ export default function Meeting() {
 
   const [users, setUsers] = useState(defaultUsers);
   const [meeting, setMeeting] = useState(defaultMeeting);
-  const [isOwner, setIsOwner] = useState(user.id === meeting?.createdBy);
+  const [isOwner, setIsOwner] = useState(user.id === meeting?.userIdAdmin);
 
   const { sendJsonMessage } = useWebSocket(
     `${import.meta.env.VITE_APP_WEBSOCKET_HOST}/meeting-votes`,
@@ -84,8 +84,8 @@ export default function Meeting() {
   };
 
   useEffect(() => {
-    setIsOwner(meeting?.createdBy === user.id);
-  }, [meeting.createdBy, user.id]);
+    setIsOwner(meeting?.userIdAdmin === user.id);
+  }, [meeting.userIdAdmin, user.id]);
 
   const availablePoints =
     import.meta.env.VITE_APP_STORY_POINTING_OPTIONS?.split(",") ?? [

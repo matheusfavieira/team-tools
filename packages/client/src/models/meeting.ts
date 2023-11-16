@@ -9,13 +9,13 @@ export async function getMeetings(): Promise<Record<string, Meeting>> {
   return meetings;
 }
 
-export async function createMeeting(createdBy: string) {
+export async function createMeeting(userIdAdmin: string) {
   const response = await fetch(`${apiHost}/meetings`, {
     method: "POST",
     headers: new Headers({
       "Content-Type": "application/json",
     }),
-    body: JSON.stringify({ createdBy }),
+    body: JSON.stringify({ userIdAdmin }),
   });
 
   const meeting = await response.json();
