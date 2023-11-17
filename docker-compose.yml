@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 services:
   team-tools-server:
     build: ./packages/server
@@ -15,5 +15,7 @@ services:
         - VITE_APP_API_HOST=http://localhost:3000
         - VITE_APP_WEBSOCKET_HOST=ws://localhost:3000
         - VITE_APP_STORY_POINTING_OPTIONS=0,0.5,1,2,3,5,8,?
+        - VITE_APP_STRIPE_PK=pk_test_51ODK4iJz8w31McToCgiNqVM0ATMxiYwNseConkdjR4kVaf7VzdxbOr8nxeb1PGEUKxqakqVuYuzc2seNM1jmYCQP00LamJ9vvP
+        - VITE_APP_STRIPE_PRODUCT_ID=price_1ODKDzJz8w31McTorX8FNgsq
     ports:
       - "4173:4173"

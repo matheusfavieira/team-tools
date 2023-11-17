@@ -15,6 +15,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import Container from "@mui/material/Container";
+import { DonationButton } from "./components/DonateButton";
 
 const drawerWidth = 240;
 const navItems = [
@@ -36,7 +39,15 @@ export default function DrawerAppBar() {
   }, []);
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+    <Box
+      onClick={handleDrawerToggle}
+      sx={{
+        textAlign: "center",
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+      }}
+    >
       <List>
         <ListItem key={"/"} disablePadding>
           <ListItemButton
@@ -49,20 +60,26 @@ export default function DrawerAppBar() {
         </ListItem>
       </List>
       <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItem key={item.url} disablePadding>
-            <ListItemButton
-              sx={{ textAlign: "center" }}
-              component={NavLink}
-              to={item.url}
-              selected={pathname === item.url}
-            >
-              <ListItemText primary={item.label} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+      <Box sx={{ flexGrow: 1 }}>
+        <List>
+          {navItems.map((item) => (
+            <ListItem key={item.url} disablePadding>
+              <ListItemButton
+                sx={{ textAlign: "center" }}
+                component={NavLink}
+                to={item.url}
+                selected={pathname === item.url}
+              >
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+      <Divider sx={{ my: 2 }} />
+      <Box sx={{ marginTop: "auto", marginBottom: 2 }}>
+        <DonationButton />
+      </Box>
     </Box>
   );
 
@@ -70,7 +87,7 @@ export default function DrawerAppBar() {
     window !== undefined ? () => window.document.body : undefined;
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
       <CssBaseline />
       <AppBar component="nav">
         <Toolbar>
@@ -103,6 +120,8 @@ export default function DrawerAppBar() {
                 {item.label}
               </Button>
             ))}
+
+            <DonationButton />
           </Box>
         </Toolbar>
       </AppBar>
@@ -126,9 +145,29 @@ export default function DrawerAppBar() {
           {drawer}
         </Drawer>
       </nav>
-      <Box component="main" sx={{ p: 3, width: "100%" }}>
+      <Box component="main" sx={{ p: 3, flexGrow: 1 }}>
         <Toolbar />
         <Outlet />
+      </Box>
+      <Divider sx={{ my: 2 }} />
+      <Box component="footer" sx={{ marginTop: "auto", marginBottom: 1 }}>
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography>
+            {new Date().getFullYear()} built by Matt Vieira
+          </Typography>
+
+          <Box>
+            <IconButton href="https://github.com/matheusfavieira">
+              <GitHubIcon />
+            </IconButton>
+          </Box>
+        </Container>
       </Box>
     </Box>
   );
