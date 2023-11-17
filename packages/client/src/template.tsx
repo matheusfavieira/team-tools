@@ -163,7 +163,10 @@ export default function DrawerAppBar() {
           </Typography>
 
           <Box>
-            <IconButton href="https://github.com/matheusfavieira">
+            <IconButton
+              href="https://github.com/matheusfavieira"
+              target="_blank"
+            >
               <GitHubIcon />
             </IconButton>
           </Box>
