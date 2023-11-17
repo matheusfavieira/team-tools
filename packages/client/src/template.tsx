@@ -1,6 +1,5 @@
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useLocation } from "react-router-dom";
 
-import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,30 +14,40 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { useEffect, useState } from "react";
 
 const drawerWidth = 240;
 const navItems = [
-  { label: "Home", url: "/" },
-  { label: "Story Pointing", url: "story-pointing" },
-  { label: "Mood Meter", url: "mood-meter" },
+  { label: "Story Pointing", url: "/story-pointing" },
+  { label: "Mood Meter", url: "/mood-meter" },
 ];
 
 export default function DrawerAppBar() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const { pathname } = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.title = import.meta.env.VITE_APP_TITLE;
   }, []);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        {import.meta.env.VITE_APP_TITLE}
-      </Typography>
+      <List>
+        <ListItem key={"/"} disablePadding>
+          <ListItemButton
+            sx={{ textAlign: "center" }}
+            component={NavLink}
+            to={"/"}
+          >
+            <ListItemText primary={import.meta.env.VITE_APP_TITLE} />
+          </ListItemButton>
+        </ListItem>
+      </List>
       <Divider />
       <List>
         {navItems.map((item) => (
@@ -47,6 +56,7 @@ export default function DrawerAppBar() {
               sx={{ textAlign: "center" }}
               component={NavLink}
               to={item.url}
+              selected={pathname === item.url}
             >
               <ListItemText primary={item.label} />
             </ListItemButton>
@@ -78,7 +88,9 @@ export default function DrawerAppBar() {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
-            {import.meta.env.VITE_APP_TITLE}
+            <Button sx={{ color: "#fff" }} component={NavLink} to={"/"}>
+              {import.meta.env.VITE_APP_TITLE}
+            </Button>
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (

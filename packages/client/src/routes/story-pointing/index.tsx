@@ -12,6 +12,10 @@ import {
 } from "../../models/user";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import CheckIcon from "@mui/icons-material/Check";
+import LoginIcon from "@mui/icons-material/Login";
 
 export async function action({ request }: ActionFunctionArgs) {
   let formData = await request.formData();
@@ -59,10 +63,16 @@ export default function Index() {
               defaultValue={user?.name}
               variant="outlined"
               size="small"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton edge="end" color="primary" type="submit">
+                      <CheckIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Button variant="contained" type="submit">
-              Save
-            </Button>
           </div>
         </Form>
       </div>
@@ -87,10 +97,16 @@ export default function Index() {
               label="Meeting #"
               variant="outlined"
               size="small"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton edge="end" color="primary" type="submit">
+                      <LoginIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Button variant="contained" type="submit" disabled={!user?.id}>
-              Join meeting
-            </Button>
           </Form>
         </div>
       )}
