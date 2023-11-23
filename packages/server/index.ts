@@ -107,6 +107,12 @@ const server = Bun.serve<{ user: Entities.User; meeting: Entities.Meeting }>({
     },
 
     message(ws, message) {
+      if (message === "ping") {
+        const meetingRoom = `meeting-${ws.data.meeting.id}`;
+        server.publish(meetingRoom, "pong");
+        return;
+      }
+
       const options = JSON.parse(message);
 
       const meetingId = ws.data.meeting.id;

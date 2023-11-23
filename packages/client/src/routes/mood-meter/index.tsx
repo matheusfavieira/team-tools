@@ -202,7 +202,7 @@ export default function MoodMeter() {
                   onClick={(e) => onMoodClick(e, mood)}
                 >
                   {mood}{" "}
-                  {countOfFires && (
+                  {+countOfFires > 0 && (
                     <span className="on-fire">
                       {Array.from({ length: countOfFires }).map(() => "🔥")}
                     </span>

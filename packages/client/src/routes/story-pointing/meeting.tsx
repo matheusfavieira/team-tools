@@ -75,6 +75,14 @@ export default function Meeting() {
           setMeeting(data.meeting);
         }
       },
+      reconnectAttempts: 10,
+      reconnectInterval: 3000,
+      heartbeat: {
+        message: "ping",
+        returnMessage: "pong",
+        timeout: 60000, // 1 minute, if no response is received, the connection will be closed
+        interval: 15000, // every 15 seconds, a ping message will be sent
+      },
     }
   );
 
